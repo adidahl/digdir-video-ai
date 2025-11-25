@@ -1,0 +1,20 @@
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+*.ipynb_checkpoints/
+.venv/
+venv/
+.env
+env
+*.env
+
+# Project specific (large / generated data should NOT go to git)
+videos/
+lightrag_store/
+transcripts/
+data/
+
+# OS
+.DS_Store
+
+

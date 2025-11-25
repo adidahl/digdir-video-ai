@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: digdir-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: digdir
+      POSTGRES_PASSWORD: digdir_password
+      POSTGRES_DB: digdirdb
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  neo4j:
+    image: neo4j:5
+    container_name: digdir-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: "neo4j/digdir_password"
+      NEO4J_PLUGINS: '["apoc"]'
+    ports:
+      - "7474:7474"  # HTTP UI
+      - "7687:7687"  # Bolt
+    volumes:
+      - ./data/neo4j/data:/data
+      - ./data/neo4j/logs:/logs
+      - ./data/neo4j/plugins:/plugins
+
+networks:
+  default:
+    name: digdir-net
+
+
