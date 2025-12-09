@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Dialog, DialogBlock, Button, Paragraph, Spinner } from "@digdir/designsystemet-react";
 import type { MessageSource } from "../../types/chat";
 
@@ -16,6 +17,7 @@ export default function VideoPlayerModal({ isOpen, onClose, source }: VideoPlaye
   const [isLoading, setIsLoading] = useState(false);
   const [hasSeekedToTimestamp, setHasSeekedToTimestamp] = useState(false);
   const [initialTimestamp, setInitialTimestamp] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   // Handle modal close - stop video playback
   const handleClose = () => {
@@ -167,7 +169,7 @@ export default function VideoPlayerModal({ isOpen, onClose, source }: VideoPlaye
             }}>
               <Spinner size="medium" />
               <Paragraph style={{ margin: 0, fontSize: "0.875rem", color: "#666" }}>
-                Loading video...
+                {t("chat.videoModal.loading")}
               </Paragraph>
             </div>
           )}
@@ -195,14 +197,14 @@ export default function VideoPlayerModal({ isOpen, onClose, source }: VideoPlaye
               textAlign: "center",
               color: "#666"
             }}>
-              <Paragraph>Video URL not available</Paragraph>
+              <Paragraph>{t("chat.videoModal.noUrl")}</Paragraph>
             </div>
           )}
         </div>
         
         <div style={{ marginBottom: "1rem" }}>
           <Paragraph>
-            <strong>Timestamp:</strong> {formatTime(source.timestamp)}
+            <strong>{t("chat.videoModal.timestamp")}:</strong> {formatTime(source.timestamp)}
           </Paragraph>
         </div>
         
@@ -214,14 +216,14 @@ export default function VideoPlayerModal({ isOpen, onClose, source }: VideoPlaye
             marginTop: "1rem"
           }}>
             <Paragraph>
-              <strong>Transcript:</strong>
+              <strong>{t("chat.videoModal.transcript")}:</strong>
             </Paragraph>
             <Paragraph>{source.text}</Paragraph>
           </div>
         )}
         
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1.5rem" }}>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>{t("common.close")}</Button>
         </div>
       </DialogBlock>
     </Dialog>

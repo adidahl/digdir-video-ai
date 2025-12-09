@@ -1,4 +1,5 @@
 import { Card, Button, Paragraph } from "@digdir/designsystemet-react";
+import { useTranslation } from "react-i18next";
 import type { Message, MessageSource } from "../../types/chat";
 
 interface MessageBubbleProps {
@@ -8,6 +9,7 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ message, onSourceClick }: MessageBubbleProps) {
   const isUser = message.role === "user";
+  const { t } = useTranslation();
   const formatTime = (timestamp: number): string => {
     const mins = Math.floor(timestamp / 60);
     const secs = Math.floor(timestamp % 60);
@@ -68,7 +70,7 @@ export default function MessageBubble({ message, onSourceClick }: MessageBubbleP
                 margin: "0.5rem 0 0 0",
               }}
             >
-              Sources:
+              {t("chat.sourcesLabel")}
             </Paragraph>
             {message.sources.map((source, index) => (
               <Card
@@ -130,7 +132,7 @@ export default function MessageBubble({ message, onSourceClick }: MessageBubbleP
                       onSourceClick(source);
                     }}
                   >
-                    Watch
+                    {t("chat.watch")}
                   </Button>
                 </div>
               </Card>

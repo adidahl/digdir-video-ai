@@ -55,6 +55,72 @@
     "deleteUser": "Slett bruker",
     "stats": "Statistikk"
   },
+  "chat": {
+    "title": "DigDir video-søkassistent",
+    "debugButton": "🐛 Feilsøk",
+    "debugTooltip": "Feilsøk kildetrekk for siste spørsmål",
+    "newConversation": "Ny samtale",
+    "placeholder": "Spør om videoene dine...",
+    "send": "Send",
+    "emptyState": {
+      "title": "Start en samtale ved å spørre om videoene dine!",
+      "hint": "Prøv: «Hva blir sagt om [tema]?» eller «Fortell meg om [emne]»"
+    },
+    "thinking": "Tenker...",
+    "sourcesLabel": "Kilder:",
+    "watch": "Se",
+    "errors": {
+      "sendFailed": "Kunne ikke sende melding. Prøv igjen.",
+      "debugMissing": "Skriv et spørsmål eller send en melding før du feilsøker"
+    },
+    "debug": {
+      "title": "Feilsøk kildetrekk",
+      "loading": "Laster feilsøkingsdata...",
+      "errorLabel": "Feil:",
+      "errors": {
+        "loadFailed": "Klarte ikke å laste feilsøkingsdata"
+      },
+      "tabs": {
+        "overview": "Oversikt",
+        "vector": "Vektorkontekst",
+        "mix": "Mix-kontekst",
+        "validations": "Valideringer",
+        "sources": "Parserte kilder"
+      },
+      "query": "Spørsmål",
+      "answer": "Svar",
+      "vectorHeaders": "Vektoroverskrifter",
+      "mixHeaders": "Mix-overskrifter",
+      "parsedSources": "Parserte kilder",
+      "segmentValidations": "Segmentvalideringer",
+      "validationsSummary": "Totalt: {{total}} | Funnet: {{found}} | Treff: {{matches}}",
+      "vectorContextHeading": "Vektormoduskontekst ({{count}} overskrifter)",
+      "mixContextHeading": "Mix-moduskontekst ({{count}} overskrifter)",
+      "noHeaders": "Ingen overskrifter funnet",
+      "noValidations": "Ingen valideringer tilgjengelig",
+      "noSources": "Ingen kilder funnet",
+      "parsedSourcesWithCount": "Parserte kilder ({{count}})",
+      "notAvailable": "Ikke tilgjengelig",
+      "table": {
+        "mode": "Modus",
+        "videoId": "Video-ID",
+        "headerStart": "Header-start",
+        "actualStart": "Faktisk start",
+        "found": "Funnet",
+        "matches": "Treff",
+        "segmentText": "Segmenttekst",
+        "timestamp": "Tidsstempel",
+        "text": "Tekst",
+        "url": "URL"
+      }
+    },
+    "videoModal": {
+      "loading": "Laster video...",
+      "noUrl": "Video-URL er ikke tilgjengelig",
+      "timestamp": "Tidsstempel",
+      "transcript": "Transkripsjon"
+    }
+  },
   "common": {
     "save": "Lagre",
     "cancel": "Avbryt",

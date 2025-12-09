@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Dialog, DialogBlock, Button, Spinner, Card, Paragraph } from "@digdir/designsystemet-react";
 import { chatAPI } from "../../api/chat";
 
@@ -39,6 +40,7 @@ interface DebugSourceData {
 }
 
 export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) {
+  const { t } = useTranslation();
   const [debugData, setDebugData] = useState<DebugSourceData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +64,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
       setDebugData(data);
     } catch (err: any) {
       console.error("Error loading debug data:", err);
-      setError(err.response?.data?.detail || err.message || "Failed to load debug data");
+      setError(err.response?.data?.detail || err.message || t("chat.debug.errors.loadFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +117,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
           flexShrink: 0
         }}>
           <h2 style={{ margin: 0, fontSize: "1.5rem", fontWeight: "bold" }}>
-            Debug Source Extraction
+            {t("chat.debug.title")}
           </h2>
           <button
             onClick={onClose}
@@ -128,7 +130,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
               lineHeight: 1,
               color: "#666"
             }}
-            aria-label="Close"
+            aria-label={t("common.close")}
           >
             ×
           </button>
@@ -145,13 +147,13 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
         {isLoading && (
           <div style={{ textAlign: "center", padding: "2rem" }}>
             <Spinner size="large" />
-            <p style={{ marginTop: "1rem" }}>Loading debug data...</p>
+            <p style={{ marginTop: "1rem" }}>{t("chat.debug.loading")}</p>
           </div>
         )}
 
         {error && (
           <Card style={{ padding: "1rem", backgroundColor: "#fee", marginBottom: "1rem" }}>
-            <strong>Error:</strong> {error}
+            <strong>{t("chat.debug.errorLabel")}</strong> {error}
           </Card>
         )}
 
@@ -171,35 +173,35 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                 variant={activeTab === "overview" ? "primary" : "secondary"}
                 onClick={() => setActiveTab("overview")}
               >
-                Overview
+                {t("chat.debug.tabs.overview")}
               </Button>
               <Button
                 size="sm"
                 variant={activeTab === "vector" ? "primary" : "secondary"}
                 onClick={() => setActiveTab("vector")}
               >
-                Vector Context
+                {t("chat.debug.tabs.vector")}
               </Button>
               <Button
                 size="sm"
                 variant={activeTab === "mix" ? "primary" : "secondary"}
                 onClick={() => setActiveTab("mix")}
               >
-                Mix Context
+                {t("chat.debug.tabs.mix")}
               </Button>
               <Button
                 size="sm"
                 variant={activeTab === "validations" ? "primary" : "secondary"}
                 onClick={() => setActiveTab("validations")}
               >
-                Validations
+                {t("chat.debug.tabs.validations")}
               </Button>
               <Button
                 size="sm"
                 variant={activeTab === "sources" ? "primary" : "secondary"}
                 onClick={() => setActiveTab("sources")}
               >
-                Parsed Sources
+                {t("chat.debug.tabs.sources")}
               </Button>
             </div>
 
@@ -207,30 +209,30 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
             {activeTab === "overview" && (
               <div>
                 <Card style={{ padding: "1rem", marginBottom: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Query</h3>
+                  <h3 style={{ marginTop: 0 }}>{t("chat.debug.query")}</h3>
                   <p style={{ fontSize: "1.1rem", fontWeight: "bold" }}>{debugData.query}</p>
                 </Card>
 
                 <Card style={{ padding: "1rem", marginBottom: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Answer</h3>
+                  <h3 style={{ marginTop: 0 }}>{t("chat.debug.answer")}</h3>
                   <p>{debugData.answer}</p>
                 </Card>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
                   <Card style={{ padding: "1rem" }}>
-                    <h4 style={{ marginTop: 0 }}>Vector Headers</h4>
+                    <h4 style={{ marginTop: 0 }}>{t("chat.debug.vectorHeaders")}</h4>
                     <p style={{ fontSize: "2rem", fontWeight: "bold", color: "#0066cc" }}>
                       {debugData.vector_headers_count}
                     </p>
                   </Card>
                   <Card style={{ padding: "1rem" }}>
-                    <h4 style={{ marginTop: 0 }}>Mix Headers</h4>
+                    <h4 style={{ marginTop: 0 }}>{t("chat.debug.mixHeaders")}</h4>
                     <p style={{ fontSize: "2rem", fontWeight: "bold", color: "#0066cc" }}>
                       {debugData.mix_headers_count}
                     </p>
                   </Card>
                   <Card style={{ padding: "1rem" }}>
-                    <h4 style={{ marginTop: 0 }}>Parsed Sources</h4>
+                    <h4 style={{ marginTop: 0 }}>{t("chat.debug.parsedSources")}</h4>
                     <p style={{ fontSize: "2rem", fontWeight: "bold", color: "#0066cc" }}>
                       {debugData.sources_count}
                     </p>
@@ -238,11 +240,13 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                 </div>
 
                 <Card style={{ padding: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Segment Validations</h3>
+                  <h3 style={{ marginTop: 0 }}>{t("chat.debug.segmentValidations")}</h3>
                   <p>
-                    Total: {debugData.segment_validations.length} | 
-                    Found: {debugData.segment_validations.filter(v => v.found).length} | 
-                    Matches: {debugData.segment_validations.filter(v => v.matches_header).length}
+                    {t("chat.debug.validationsSummary", { 
+                      total: debugData.segment_validations.length, 
+                      found: debugData.segment_validations.filter(v => v.found).length, 
+                      matches: debugData.segment_validations.filter(v => v.matches_header).length 
+                    })}
                   </p>
                 </Card>
               </div>
@@ -252,7 +256,9 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
             {activeTab === "vector" && (
               <div>
                 <Card style={{ padding: "1rem", marginBottom: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Vector Mode Context ({debugData.vector_headers_count} headers)</h3>
+                  <h3 style={{ marginTop: 0 }}>
+                    {t("chat.debug.vectorContextHeading", { count: debugData.vector_headers_count })}
+                  </h3>
                   <pre style={{ 
                     backgroundColor: "#f5f5f5", 
                     padding: "1.5rem", 
@@ -269,7 +275,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                 </Card>
 
                 <Card style={{ padding: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Vector Headers</h3>
+                  <h3 style={{ marginTop: 0 }}>{t("chat.debug.vectorHeaders")}</h3>
                   {debugData.vector_headers.length > 0 ? (
                     <ul style={{ listStyle: "none", padding: 0 }}>
                       {debugData.vector_headers.map((header, idx) => (
@@ -284,7 +290,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                       ))}
                     </ul>
                   ) : (
-                    <p>No headers found</p>
+                    <p>{t("chat.debug.noHeaders")}</p>
                   )}
                 </Card>
               </div>
@@ -294,7 +300,9 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
             {activeTab === "mix" && (
               <div>
                 <Card style={{ padding: "1rem", marginBottom: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Mix Mode Context ({debugData.mix_headers_count} headers)</h3>
+                  <h3 style={{ marginTop: 0 }}>
+                    {t("chat.debug.mixContextHeading", { count: debugData.mix_headers_count })}
+                  </h3>
                   <pre style={{ 
                     backgroundColor: "#f5f5f5", 
                     padding: "1.5rem", 
@@ -311,7 +319,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                 </Card>
 
                 <Card style={{ padding: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Mix Headers</h3>
+                  <h3 style={{ marginTop: 0 }}>{t("chat.debug.mixHeaders")}</h3>
                   {debugData.mix_headers.length > 0 ? (
                     <ul style={{ listStyle: "none", padding: 0 }}>
                       {debugData.mix_headers.map((header, idx) => (
@@ -326,7 +334,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                       ))}
                     </ul>
                   ) : (
-                    <p>No headers found</p>
+                    <p>{t("chat.debug.noHeaders")}</p>
                   )}
                 </Card>
               </div>
@@ -336,19 +344,19 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
             {activeTab === "validations" && (
               <div>
                 <Card style={{ padding: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Segment Validations</h3>
+                  <h3 style={{ marginTop: 0 }}>{t("chat.debug.segmentValidations")}</h3>
                   {debugData.segment_validations.length > 0 ? (
                     <div style={{ overflowX: "auto", overflowY: "visible" }}>
                       <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "800px" }}>
                         <thead>
                           <tr style={{ backgroundColor: "#f0f0f0" }}>
-                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>Mode</th>
-                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>Video ID</th>
-                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>Header Start</th>
-                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>Actual Start</th>
-                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>Found</th>
-                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>Matches</th>
-                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>Segment Text</th>
+                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>{t("chat.debug.table.mode")}</th>
+                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>{t("chat.debug.table.videoId")}</th>
+                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>{t("chat.debug.table.headerStart")}</th>
+                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>{t("chat.debug.table.actualStart")}</th>
+                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>{t("chat.debug.table.found")}</th>
+                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>{t("chat.debug.table.matches")}</th>
+                            <th style={{ padding: "0.5rem", textAlign: "left", border: "1px solid #ddd" }}>{t("chat.debug.table.segmentText")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -362,7 +370,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                               </td>
                               <td style={{ padding: "0.5rem", border: "1px solid #ddd" }}>{val.header_start.toFixed(2)}s</td>
                               <td style={{ padding: "0.5rem", border: "1px solid #ddd" }}>
-                                {val.actual_start !== null ? `${val.actual_start.toFixed(2)}s` : "N/A"}
+                                {val.actual_start !== null ? `${val.actual_start.toFixed(2)}s` : t("chat.debug.notAvailable")}
                               </td>
                               <td style={{ padding: "0.5rem", border: "1px solid #ddd", textAlign: "center" }}>
                                 {val.found ? "✓" : "✗"}
@@ -371,7 +379,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                                 {val.matches_header ? "✓" : "✗"}
                               </td>
                               <td style={{ padding: "0.5rem", border: "1px solid #ddd", maxWidth: "300px", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                {val.segment_text || "N/A"}
+                                {val.segment_text || t("chat.debug.notAvailable")}
                               </td>
                             </tr>
                           ))}
@@ -379,7 +387,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                       </table>
                     </div>
                   ) : (
-                    <p>No validations available</p>
+                    <p>{t("chat.debug.noValidations")}</p>
                   )}
                 </Card>
               </div>
@@ -389,7 +397,9 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
             {activeTab === "sources" && (
               <div>
                 <Card style={{ padding: "1rem" }}>
-                  <h3 style={{ marginTop: 0 }}>Parsed Sources ({debugData.sources_count})</h3>
+                  <h3 style={{ marginTop: 0 }}>
+                    {t("chat.debug.parsedSourcesWithCount", { count: debugData.sources_count })}
+                  </h3>
                   {debugData.parsed_sources.length > 0 ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                       {debugData.parsed_sources.map((source, idx) => (
@@ -397,17 +407,17 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
                           <h4 style={{ marginTop: 0 }}>
                             {idx + 1}. {source.video_title}
                           </h4>
-                          <p><strong>Timestamp:</strong> {source.timestamp.toFixed(2)}s</p>
-                          <p><strong>Text:</strong> {source.text}</p>
+                          <p><strong>{t("chat.debug.table.timestamp")}:</strong> {source.timestamp.toFixed(2)}s</p>
+                          <p><strong>{t("chat.debug.table.text")}:</strong> {source.text}</p>
                           <p style={{ fontSize: "0.9rem", color: "#666" }}>
-                            <strong>Video ID:</strong> {source.video_id} | 
-                            <strong> URL:</strong> {source.url}
+                            <strong>{t("chat.debug.table.videoId")}:</strong> {source.video_id} | 
+                            <strong> {t("chat.debug.table.url")}:</strong> {source.url}
                           </p>
                         </Card>
                       ))}
                     </div>
                   ) : (
-                    <p>No sources parsed</p>
+                    <p>{t("chat.debug.noSources")}</p>
                   )}
                 </Card>
               </div>
@@ -424,7 +434,7 @@ export default function DebugModal({ isOpen, onClose, query }: DebugModalProps) 
           borderTop: "1px solid #e0e0e0",
           flexShrink: 0
         }}>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{t("common.close")}</Button>
         </div>
       </div>
     </div>

@@ -55,6 +55,72 @@
     "deleteUser": "Delete User",
     "stats": "Statistics"
   },
+  "chat": {
+    "title": "DigDir Video Search Assistant",
+    "debugButton": "🐛 Debug",
+    "debugTooltip": "Debug source extraction for last query",
+    "newConversation": "New Conversation",
+    "placeholder": "Ask about your videos...",
+    "send": "Send",
+    "emptyState": {
+      "title": "Start a conversation by asking about your videos!",
+      "hint": "Try: \"What is discussed about [topic]?\" or \"Tell me about [subject]\""
+    },
+    "thinking": "Thinking...",
+    "sourcesLabel": "Sources:",
+    "watch": "Watch",
+    "errors": {
+      "sendFailed": "Failed to send message. Please try again.",
+      "debugMissing": "Please enter a query or send a message first to debug"
+    },
+    "debug": {
+      "title": "Debug Source Extraction",
+      "loading": "Loading debug data...",
+      "errorLabel": "Error:",
+      "errors": {
+        "loadFailed": "Failed to load debug data"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "vector": "Vector Context",
+        "mix": "Mix Context",
+        "validations": "Validations",
+        "sources": "Parsed Sources"
+      },
+      "query": "Query",
+      "answer": "Answer",
+      "vectorHeaders": "Vector Headers",
+      "mixHeaders": "Mix Headers",
+      "parsedSources": "Parsed Sources",
+      "segmentValidations": "Segment Validations",
+      "validationsSummary": "Total: {{total}} | Found: {{found}} | Matches: {{matches}}",
+      "vectorContextHeading": "Vector Mode Context ({{count}} headers)",
+      "mixContextHeading": "Mix Mode Context ({{count}} headers)",
+      "noHeaders": "No headers found",
+      "noValidations": "No validations available",
+      "noSources": "No sources parsed",
+      "parsedSourcesWithCount": "Parsed Sources ({{count}})",
+      "notAvailable": "N/A",
+      "table": {
+        "mode": "Mode",
+        "videoId": "Video ID",
+        "headerStart": "Header Start",
+        "actualStart": "Actual Start",
+        "found": "Found",
+        "matches": "Matches",
+        "segmentText": "Segment Text",
+        "timestamp": "Timestamp",
+        "text": "Text",
+        "url": "URL"
+      }
+    },
+    "videoModal": {
+      "loading": "Loading video...",
+      "noUrl": "Video URL not available",
+      "timestamp": "Timestamp",
+      "transcript": "Transcript"
+    }
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",

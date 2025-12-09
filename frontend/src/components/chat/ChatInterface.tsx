@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Textfield, Card, Spinner } from "@digdir/designsystemet-react";
 import { chatAPI } from "../../api/chat";
 import type { Message, MessageSource } from "../../types/chat";
@@ -15,8 +16,10 @@ export default function ChatInterface({
   conversationId: initialConversationId,
   onConversationChange 
 }: ChatInterfaceProps) {
+  const { t } = useTranslation();
   const brandColor = "#1e2b3c";
-  const actionButtonStyle = { backgroundColor: brandColor, color: "#fff", borderColor: "#fff", borderWidth: "1px", borderStyle: "solid" };
+  const actionButtonStyle = { backgroundColor: brandColor, color: "#fff" };
+  const sendButtonStyle = { backgroundColor: brandColor, color: "#fff", borderColor: "#fff", borderWidth: "1px", borderStyle: "solid" };
   const chatHeaderBg = "rgb(243, 215, 151)";
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -115,7 +118,7 @@ export default function ChatInterface({
       console.error("Error sending message:", error);
       // Remove temp message on error
       setMessages((prev) => prev.filter((m) => m.id !== tempUserMessage.id));
-      alert("Failed to send message. Please try again.");
+      alert(t("chat.errors.sendFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -146,7 +149,7 @@ export default function ChatInterface({
       setDebugQuery(input.trim());
       setIsDebugModalOpen(true);
     } else {
-      alert("Please enter a query or send a message first to debug");
+      alert(t("chat.errors.debugMissing"));
     }
   };
 
@@ -172,11 +175,11 @@ export default function ChatInterface({
             size="sm" 
             variant="tertiary"
             onClick={handleDebugClick}
-            title="Debug source extraction for last query"
+            title={t("chat.debugTooltip")}
             disabled={messages.length === 0 && !input.trim()}
             style={actionButtonStyle}
           >
-            🐛 Debug
+            {t("chat.debugButton")}
           </Button>
           <Button 
             size="sm" 
@@ -184,10 +187,10 @@ export default function ChatInterface({
             onClick={handleNewConversation}
             style={actionButtonStyle}
           >
-            New Conversation
+            {t("chat.newConversation")}
           </Button>
         </div>
-        <h2 style={{ margin: 0, color: brandColor }}>Video Search Assistant</h2>
+        <h2 style={{ margin: 0, color: brandColor }}>{t("chat.title")}</h2>
       </div>
 
       {/* Messages Area */}
@@ -206,9 +209,9 @@ export default function ChatInterface({
             color: "#666", 
             marginTop: "2rem" 
           }}>
-            <p>Start a conversation by asking about your videos!</p>
+            <p>{t("chat.emptyState.title")}</p>
             <p style={{ fontSize: "0.9rem" }}>
-              Try: "What is discussed about [topic]?" or "Tell me about [subject]"
+              {t("chat.emptyState.hint")}
             </p>
           </div>
         )}
@@ -225,7 +228,7 @@ export default function ChatInterface({
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
             <Card style={{ padding: "1rem" }}>
               <Spinner size="small" />
-              <span style={{ marginLeft: "0.5rem" }}>Thinking...</span>
+              <span style={{ marginLeft: "0.5rem" }}>{t("chat.thinking")}</span>
             </Card>
           </div>
         )}
@@ -244,7 +247,7 @@ export default function ChatInterface({
             <Textfield
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about your videos..."
+              placeholder={t("chat.placeholder")}
               disabled={isLoading}
               style={{ width: "100%", backgroundColor: "#fff", borderRadius: "4px" }}
             />
@@ -252,9 +255,9 @@ export default function ChatInterface({
           <Button 
             type="submit" 
             disabled={!input.trim() || isLoading}
-            style={actionButtonStyle}
+            style={sendButtonStyle}
           >
-            Send
+            {t("chat.send")}
           </Button>
         </form>
       </div>
