@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "DigDir",
+    "subtitle": "Semantisk videosøk"
+  },
+  "nav": {
+    "search": "Søk",
+    "videos": "Videoar",
+    "admin": "Admin",
+    "profile": "Profil",
+    "logout": "Logg ut"
+  },
+  "auth": {
+    "login": "Logg inn",
+    "register": "Registrer",
+    "email": "E-post",
+    "password": "Passord",
+    "fullName": "Fullt namn",
+    "organizationName": "Organisasjonsnamn",
+    "loginButton": "Logg inn",
+    "registerButton": "Opprett konto",
+    "alreadyHaveAccount": "Har du allereie ein konto?",
+    "noAccount": "Har du ikkje ein konto?",
+    "loginError": "Ugyldig e-post eller passord",
+    "registerSuccess": "Kontoen vart oppretta"
+  },
+  "search": {
+    "placeholder": "Søk i videoar...",
+    "button": "Søk",
+    "noResults": "Ingen resultat funne",
+    "results": "Resultat",
+    "score": "Relevans"
+  },
+  "video": {
+    "title": "Tittel",
+    "description": "Skildring",
+    "status": "Status",
+    "duration": "Varigheit",
+    "uploaded": "Lasta opp",
+    "securityLevel": "Sikkerheitsnivå",
+    "upload": "Last opp video",
+    "selectFile": "Vel videofil",
+    "uploadButton": "Last opp",
+    "processing": "Behandlar",
+    "completed": "Fullført",
+    "failed": "Feila"
+  },
+  "admin": {
+    "title": "Administrasjon",
+    "users": "Brukarar",
+    "videos": "Videoar",
+    "organizations": "Organisasjonar",
+    "createUser": "Opprett brukar",
+    "editUser": "Rediger brukar",
+    "deleteUser": "Slett brukar",
+    "stats": "Statistikk"
+  },
+  "common": {
+    "save": "Lagre",
+    "cancel": "Avbryt",
+    "delete": "Slett",
+    "edit": "Rediger",
+    "close": "Lukk",
+    "loading": "Lastar...",
+    "error": "Det oppstod ein feil",
+    "success": "Vellykka",
+    "confirm": "Stadfest"
+  }
+}
+

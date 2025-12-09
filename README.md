@@ -1,107 +1,309 @@
-## A Technical Whitepaper on a Video AI RAG Pipeline
+# Video RAG Platform
 
-![DigDir AI Video Search Overview](./DifDir%20AI%20video%20search%20infographics.png)
+A production-ready multi-tenant video search platform with RAG capabilities, featuring JWT authentication, role-based access control, async video processing with Whisper, vector/graph storage, and a modern React frontend with Designsystemet UI library supporting 3 languages (English, Norwegian Bokmål, Norwegian Nynorsk).
 
-### 1.0 Introduction
+## Features
 
-Modern enterprises like DIgDir are confronting a compounding knowledge debt, where vast archives of unstructured video content—from strategic meetings to technical training—grow daily, yet the intelligence within remains inaccessible. This creates a strategic intelligence gap, locking valuable insights away from those who need them most, hindering organizational agility, and stifling innovation. Without the ability to effectively search and retrieve this institutional knowledge, enterprises face duplicated effort, delayed decisions, and a persistent inability to leverage their own expertise.
+- **Multi-tenant Architecture**: Organizations with role-based access control (Super Admin, Org Admin, User)
+- **Video Processing**: Automatic transcription using OpenAI Whisper (large model)
+- **Semantic Search**: Vector search with pgvector and LightRAG for semantic understanding
+- **Knowledge Graph**: Neo4j graph database for relationships and entity extraction
+- **Modern UI**: React frontend with Norwegian Designsystemet components
+- **Internationalization**: Support for English, Norwegian Bokmål, and Norwegian Nynorsk
+- **Security Levels**: Public, Internal, Confidential, Secret video classification
+- **Async Processing**: Celery workers for video transcription tasks
 
-This whitepaper details a successful Proof-of-Concept (POC) for a Video AI Retrieval-Augmented Generation (RAG) pipeline, architected to resolve this challenge. The pipeline is designed to systematically transcribe, index, and transform passive video assets into a fully searchable, interactive enterprise knowledge base. By converting spoken content into structured, queryable data, the solution unlocks the value trapped within these media files.
+## Technology Stack
 
-The following sections provide a comprehensive overview of the solution architecture, an analysis of the core technology stack, a step-by-step review of the implementation, and an exploration of its strategic business value.
+### Backend
+- **FastAPI** - REST API framework
+- **Python 3.11+**
+- **Celery + Redis** - Async task processing
+- **OpenAI Whisper** - Video transcription
+- **LightRAG** - Semantic search and RAG
+- **Alembic** - Database migrations
+- **JWT** - Authentication
+- **SQLAlchemy** - ORM
 
-### 2.0 Solution Architecture Overview
+### Frontend
+- **Vite + React + TypeScript**
+- **Designsystemet** (@digdir/designsystemet-react)
+- **React Router v6**
+- **React Query** - Data fetching
+- **i18next** - Internationalization
+- **Axios** - HTTP client
 
-The strategic success of a modern AI system depends on a modular, end-to-end architecture that is both robust and scalable. The design of this Video AI RAG pipeline prioritizes a logical and transparent data flow, from initial ingestion to intelligent retrieval. This section provides a high-level blueprint of the POC's operational stages and the technology stack that powers them.
+### Databases
+- **PostgreSQL** - Users, videos, metadata, organizations
+- **PostgreSQL with pgvector** - Vector embeddings
+- **Neo4j** - Knowledge graph
+- **Redis** - Celery broker + result backend
 
-The pipeline processes video content through a sequence of five distinct stages:
+## Quick Start
 
-- **Video Ingestion**: Local video files (`video1.mp4`, `video2.mp4`) are identified and prepared for processing.
-- **AI-Powered Transcription**: OpenAI's Whisper model transcribes the video content, generating precise text segments with associated timestamps.
-- **Data Structuring & Indexing**: Transcribed segments are formatted into structured contexts and ingested into the LightRAG framework for semantic indexing.
-- **Dual-Strategy Persistence**: The structured data is exported and loaded into two distinct database systems: a PostgreSQL database for vector-enabled querying and a Neo4j graph database for contextual relationship mapping.
-- **Intelligent Retrieval**: A user query triggers a semantic search across the indexed data, retrieving the most relevant video segments with actionable timestamps.
+### Prerequisites
 
-The core technologies were architected to create a powerful, integrated, and flexible system:
+- Docker and Docker Compose
+- OpenAI API key (for Whisper and embeddings)
 
-| Component             | Selected Technology                      | Role in the Pipeline                                                                                                                                         |
-| --------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Video Transcription   | OpenAI Whisper (large model)            | Transcribes video audio into precise text segments with timestamps, forming the foundational data layer.                                                    |
-| RAG Orchestration     | LightRAG                                | Central framework for managing the RAG pipeline, handling data indexing and integration with embedding and language models.                                 |
-| Embedding & LLM       | OpenAI (`openai_embed`, `gpt_4o_mini_complete`) | Converts text into numerical vectors for semantic search and provides generative capabilities for summarization and Q&A.                                    |
-| Structured/Vector Store | PostgreSQL                            | Primary structured database for video segments, designed to be extended with vector capabilities (e.g., pgvector) for fast semantic search.                 |
-| Graph Context Store   | Neo4j                                   | Models the transcribed data as a graph, enabling analytical exploration of relationships between videos, segments, and topics.                              |
+### 1. Clone and Setup
 
-This high-level architecture provides the foundation for a deeper analysis of each component's specific role and contribution to the overall solution.
+```bash
+git clone <repository-url>
+cd digdir-video-ai
+cp .env.example .env
+```
 
-### 3.0 Core Technology Stack Analysis
+### 2. Configure Environment
 
-The technology stack was architected to leverage best-in-class, loosely coupled components, ensuring each stage of the pipeline is optimized for its specific task. This approach maximizes accuracy, efficiency, and future extensibility. This section analyzes the rationale behind each key component.
+Edit `.env` and add your OpenAI API key:
 
-#### 3.1 Video Transcription: OpenAI Whisper
+```bash
+OPENAI_API_KEY=sk-your-api-key-here
+JWT_SECRET_KEY=your-random-secret-key-here
+```
 
-OpenAI Whisper serves as the foundational component of the entire pipeline, responsible for the critical first step of data extraction. The POC utilizes the "large" model variant to ensure the highest possible transcription accuracy. Whisper's key function is not just converting speech to text, but doing so while generating precise, segment-level timestamps. These timestamps are essential, as they enable the final application to link a user's query directly to the exact moment in a video where the relevant topic is discussed, making the retrieved information immediately actionable.
+### 3. Start Services
 
-#### 3.2 RAG Orchestration: LightRAG
+```bash
+docker-compose up -d
+```
 
-LightRAG functions as the central nervous system of the pipeline, orchestrating the core RAG process. It ingests the prepared text segments, managing the internal text splitting and chunking strategy, and generating the corresponding vector embeddings for indexing via its configured openai_embed function. Crucially, the architecture is inherently generative-ready. By configuring gpt_4o_mini_complete as the llm_model_func at initialization, the pipeline is immediately capable of performing advanced generative tasks—such as abstractive question-answering or summarization—that build upon the retrieved video contexts, even though this POC focuses on the retrieval component.
+This will start:
+- PostgreSQL (port 5432)
+- Neo4j (ports 7474, 7687)
+- Redis (port 6379)
+- Backend API (port 8000)
+- Celery Worker
+- Frontend (port 5173)
 
-#### 3.3 Dual-Persistence Strategy: PostgreSQL and Neo4j
+### 4. Access the Application
 
-The architecture deliberately employs a dual-database strategy to decouple operational retrieval from analytical exploration. This design is not redundant; it provides two complementary data models that serve distinct query patterns, creating a more robust and versatile knowledge base capable of satisfying both application-level and analytical requirements.
+- **Frontend**: http://localhost:5173
+- **API Documentation**: http://localhost:8000/api/docs
+- **Neo4j Browser**: http://localhost:7474
 
-##### 3.3.1 PostgreSQL for Vector-Enabled Structured Storage
+### 5. Create First User
 
-PostgreSQL acts as the primary datastore for operational, low-latency semantic retrieval. The POC establishes a video_segments table with a well-defined schema (id, video_id, segment_id, start, "end", text, url) to house the structured data. This relational model is optimized for the "find-the-needle" task where an application needs a fast, precise answer. Utilizing a standard relational database that can be enhanced with vector extensions like pgvector presents a cost-effective and integration-friendly pattern for deploying efficient, large-scale semantic search capabilities.
+1. Navigate to http://localhost:5173
+2. Click "Register"
+3. Fill in:
+   - Email
+   - Password (min 8 characters)
+   - Full Name
+   - Organization Name
 
-##### 3.3.2 Neo4j for Graph-Based Contextual Relationships
+The first user of an organization is automatically assigned the `org_admin` role.
 
-Neo4j is used to model the same data as an interconnected graph, designed for analytical, exploratory analysis. In this model, each video and its transcript segments are represented as nodes, linked by a (:Video)-[:HAS_SEGMENT]->(:VideoSegment) relationship. This graph structure is optimized for the "understand-the-haystack" task, uncovering latent connections and patterns across the entire dataset. This graph structure enables complex queries such as, "Find all projects discussed by Speaker X in Q3 that are also related to the 'data sharing' initiative," a task that is prohibitively complex for a relational or vector-only store.
+## Development
 
-This technical foundation provides the "what" of the solution; the next section details the "how" of its implementation.
+### Backend Development
 
-### 4.0 Step-by-Step Implementation of the Proof-of-Concept
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 
-This section provides a clear, narrative walkthrough of the four primary phases of the POC's execution. It translates the technical operations from the source code into a logical sequence, demonstrating how raw video files are transformed into an intelligent, queryable asset.
+# Run database migrations
+alembic upgrade head
 
-#### 4.1 Phase 1: Video Processing and Transcription
+# Start development server
+uvicorn app.main:app --reload
+```
 
-The process begins by configuring the paths to local video files, video1.mp4 and video2.mp4. The transcribe_video function executes the Whisper model against each file, automatically detecting the language and generating a detailed transcription. The output is a collection of structured data segments, each containing the transcribed text along with its precise start and end time. This raw output is systematically saved to a transcripts_segments.jsonl file, creating a durable, reusable data source for all subsequent steps.
+### Frontend Development
 
-#### 4.2 Phase 2: Data Preparation and Indexing
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-With the raw transcripts available, the next phase prepares this data for the RAG framework. Each segment record from the JSONL file is transformed into a standardized "context" string by prepending a metadata header (e.g., [video_id=video1;start=10.5;end=25.2;segment_id=1]) to the transcribed text. This practice of embedding structured metadata directly within the text context is a crucial RAG pattern. It ensures that each retrieved chunk is a self-contained unit of information, eliminating the need for secondary lookups and simplifying the process of grounding an LLM's response with verifiable source data. These prepared contexts are then inserted into the LightRAG instance using rag.ainsert for semantic indexing.
+### Run Tests
 
-#### 4.3 Phase 3: Data Persistence in External Databases
+Backend:
+```bash
+cd backend
+pytest
+```
 
-To ensure long-term storage and enable diverse query capabilities, the structured segments are exported to an intermediate file, chunks_for_db.jsonl. After the initial transcripts are generated into transcripts_segments.jsonl, they are loaded, formatted with metadata, and then exported as a clean, persistence-ready dataset to chunks_for_db.jsonl. This intermediate file acts as a canonical source for idempotently populating both the relational and graph databases.
+Frontend:
+```bash
+cd frontend
+npm run test
+```
 
-* PostgreSQL Ingestion: The system connects to PostgreSQL and executes a CREATE TABLE statement to ensure the video_segments table exists. It then iterates through the records in chunks_for_db.jsonl, using an INSERT ... ON CONFLICT statement to efficiently load each segment into the relational table.
-* Neo4j Ingestion: Concurrently, for each record in the same source file, a Cypher query is executed against the Neo4j database. The query uses MERGE to intelligently create :Video and :VideoSegment nodes and establish the :HAS_SEGMENT relationship between them, effectively building the knowledge graph segment by segment.
+## Database Migrations
 
-#### 4.4 Phase 4: Semantic Retrieval and Interaction
+Create a new migration:
 
-The final phase demonstrates the pipeline's core retrieval value through the search_segments_async function. For the purposes of this POC, the function pre-computes and caches the embeddings for all video segments into an in-memory NumPy array. When a user provides a natural language query, such as "Når snakker de om datadeling og plattform?", the function computes the query's embedding. The search operation is then executed as a highly efficient cosine similarity calculation between the query vector and this cached array, allowing for rapid, real-time retrieval without immediate reliance on a dedicated vector database.
+```bash
+cd backend
+alembic revision --autogenerate -m "Description of changes"
+```
 
-The function returns the top matching results, each containing the video_id, start time, relevant text, a relevance score, and a URL designed to link a user directly to that precise moment in the video.
+Apply migrations:
 
-This implementation successfully bridges the gap between raw technical capability and tangible business utility for an organization like DIgDir.
+```bash
+alembic upgrade head
+```
 
-### 5.0 Business Applications and Strategic Value for DIgDir
+Rollback:
 
-The technical capabilities demonstrated in this POC translate directly into tangible business outcomes. By transforming a passive video archive into an active and intelligent corporate asset, the Video AI RAG pipeline offers DIgDir a significant competitive advantage. This section evaluates the primary business applications and their strategic value.
+```bash
+alembic downgrade -1
+```
 
-* On-Demand Knowledge Retrieval Employees can find precise information in minutes instead of hours. By asking natural language questions, they receive direct answers backed by a link to the source video at the exact moment a topic was discussed. This capability is powered by the sub-second latency of the semantic cache and the precision of Whisper's timestamping, drastically reducing research time.
-* Accelerated Content Discovery Teams can instantly locate all mentions of specific projects, initiatives, or keywords across the entire video library without manual review. This capability is a direct result of transforming unstructured speech into a unified, indexed data layer across both relational and graph models, supporting better-informed strategic planning.
-* Enhanced Training and Onboarding Corporate training becomes far more effective. Managers can create curated learning paths with direct links to specific, bite-sized segments from longer instructional videos. This allows for customized, efficient, and just-in-time learning, improving knowledge retention and reducing ramp-up time for new hires.
-* Improved Accessibility and Compliance The automatically generated transcripts make all video content fully accessible and searchable, aiding employees with hearing impairments or those who prefer reading. Furthermore, having a complete, time-stamped text record of official proceedings aids in compliance, record-keeping, and governance activities.
+## API Endpoints
 
-This solution empowers DIgDir to leverage its own history and expertise in powerful new ways, fostering a more knowledgeable and efficient workforce.
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login and get JWT token
+- `GET /api/auth/me` - Get current user info
 
-### 6.0 Conclusion
+### Videos
+- `POST /api/videos/upload` - Upload video (multipart/form-data)
+- `GET /api/videos/` - List accessible videos
+- `GET /api/videos/{id}` - Get video details
+- `GET /api/videos/{id}/segments` - Get video segments with transcriptions
+- `PATCH /api/videos/{id}` - Update video metadata
+- `DELETE /api/videos/{id}` - Delete video
 
-This Proof-of-Concept has successfully demonstrated a viable, end-to-end pipeline for unlocking the immense value contained within DIgDir's video archives. The project confirmed that it is possible to systematically ingest, transcribe, index, and query video content, thereby converting a previously opaque data source into a powerful organizational asset.
+### Search
+- `POST /api/search/` - Semantic search across videos
+- `GET /api/search/lightrag/{query}` - Advanced RAG search
 
-The primary conclusion is that by leveraging a modern AI stack—including OpenAI Whisper for transcription, LightRAG for orchestration, and a dual-database persistence strategy with PostgreSQL and Neo4j—an organization can transform a static video library into a dynamic, queryable enterprise knowledge base.
+### Admin
+- `GET /api/admin/organizations` - List organizations (super admin)
+- `POST /api/admin/organizations` - Create organization (super admin)
+- `GET /api/admin/organizations/{id}/users` - List org users
+- `GET /api/admin/organizations/{id}/stats` - Get org statistics
 
-This POC establishes a foundational architectural pattern for converting unstructured data streams into queryable assets, positioning DIgDir to build a comprehensive and scalable enterprise intelligence fabric.
+### Users
+- `GET /api/users/` - List users in organization
+- `POST /api/users/` - Create user (org admin+)
+- `GET /api/users/{id}` - Get user details
+- `PATCH /api/users/{id}` - Update user
+- `DELETE /api/users/{id}` - Delete user (super admin)
+
+## Architecture
+
+### Video Processing Flow
+
+1. User uploads video via `/api/videos/upload`
+2. Video saved to Docker volume, database record created with status="processing"
+3. Celery task triggered: `transcribe_video.delay(video_id)`
+4. Whisper transcribes video → segments with timestamps
+5. Segments saved to PostgreSQL + embeddings to pgvector
+6. LightRAG processes transcripts (organization-specific working directory)
+7. Neo4j graph updated with entities and relationships
+8. Video status updated to "completed"
+9. Frontend can now search and view transcriptions
+
+### Access Control
+
+- **Super Admin**: Access to all organizations and videos
+- **Org Admin**: Access to all videos in their organization, can manage users
+- **User**: Access to videos based on organization membership and security level
+
+### Security Levels
+
+- **Public**: All organization members can access
+- **Internal**: All organization members can access
+- **Confidential**: Org admins and explicitly granted users
+- **Secret**: Org admins and explicitly granted users
+
+## Multi-Tenancy
+
+Each organization has:
+- Separate LightRAG working directory: `/app/lightrag_store/org_{organization_id}/`
+- Isolated video storage: `/app/videos/{organization_id}/`
+- Filtered database queries based on `organization_id`
+
+## Configuration
+
+Key environment variables:
+
+- `DATABASE_URL`: PostgreSQL connection string
+- `NEO4J_URI`: Neo4j connection URI
+- `NEO4J_USER`, `NEO4J_PASSWORD`: Neo4j credentials
+- `REDIS_URL`: Redis connection string
+- `JWT_SECRET_KEY`: Secret key for JWT signing
+- `OPENAI_API_KEY`: OpenAI API key for Whisper and embeddings
+- `WHISPER_MODEL`: Whisper model size (tiny, base, small, medium, large, turbo)
+- `VIDEO_STORAGE_PATH`: Path for video file storage
+- `LIGHTRAG_STORAGE_PATH`: Path for LightRAG working directories
+
+## Production Deployment
+
+### Security Checklist
+
+- [ ] Change `JWT_SECRET_KEY` to a strong random value
+- [ ] Use strong database passwords
+- [ ] Enable HTTPS with TLS certificates
+- [ ] Configure rate limiting on API endpoints
+- [ ] Set up firewall rules
+- [ ] Enable database backups
+- [ ] Configure log aggregation
+- [ ] Set up monitoring (Prometheus/Grafana)
+
+### Performance Optimization
+
+- Horizontal scaling of Celery workers for faster video processing
+- Database connection pooling (already configured)
+- CDN for frontend assets
+- Video streaming optimization with chunked transfer
+- Redis caching for frequently accessed data
+
+### Backup Strategy
+
+- Database: Daily PostgreSQL backups
+- Neo4j: Regular graph database backups
+- Videos: Backup to S3-compatible storage
+- LightRAG data: Include in backup strategy
+
+## Troubleshooting
+
+### Video transcription fails
+
+Check Celery worker logs:
+```bash
+docker-compose logs celery-worker
+```
+
+Common issues:
+- ffmpeg not installed in Docker image
+- Insufficient memory for Whisper model
+- OpenAI API key not configured
+
+### Database connection errors
+
+Check if PostgreSQL is running:
+```bash
+docker-compose ps postgres
+```
+
+Check connection settings in `.env` file.
+
+### Frontend can't connect to backend
+
+- Verify `VITE_API_BASE_URL` in frontend `.env`
+- Check CORS settings in `backend/app/main.py`
+- Ensure backend is running on port 8000
+
+## License
+
+MIT License
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests
+5. Submit a pull request
+
+## Support
+
+For issues and questions, please open an issue on GitHub.

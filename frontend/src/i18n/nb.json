@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "DigDir",
+    "subtitle": "Semantisk videosøk"
+  },
+  "nav": {
+    "search": "Søk",
+    "videos": "Videoer",
+    "admin": "Admin",
+    "profile": "Profil",
+    "logout": "Logg ut"
+  },
+  "auth": {
+    "login": "Logg inn",
+    "register": "Registrer",
+    "email": "E-post",
+    "password": "Passord",
+    "fullName": "Fullt navn",
+    "organizationName": "Organisasjonsnavn",
+    "loginButton": "Logg inn",
+    "registerButton": "Opprett konto",
+    "alreadyHaveAccount": "Har du allerede en konto?",
+    "noAccount": "Har du ikke en konto?",
+    "loginError": "Ugyldig e-post eller passord",
+    "registerSuccess": "Kontoen ble opprettet"
+  },
+  "search": {
+    "placeholder": "Søk i videoer...",
+    "button": "Søk",
+    "noResults": "Ingen resultater funnet",
+    "results": "Resultater",
+    "score": "Relevans"
+  },
+  "video": {
+    "title": "Tittel",
+    "description": "Beskrivelse",
+    "status": "Status",
+    "duration": "Varighet",
+    "uploaded": "Lastet opp",
+    "securityLevel": "Sikkerhetsnivå",
+    "upload": "Last opp video",
+    "selectFile": "Velg videofil",
+    "uploadButton": "Last opp",
+    "processing": "Behandler",
+    "completed": "Fullført",
+    "failed": "Feilet"
+  },
+  "admin": {
+    "title": "Administrasjon",
+    "users": "Brukere",
+    "videos": "Videoer",
+    "organizations": "Organisasjoner",
+    "createUser": "Opprett bruker",
+    "editUser": "Rediger bruker",
+    "deleteUser": "Slett bruker",
+    "stats": "Statistikk"
+  },
+  "common": {
+    "save": "Lagre",
+    "cancel": "Avbryt",
+    "delete": "Slett",
+    "edit": "Rediger",
+    "close": "Lukk",
+    "loading": "Laster...",
+    "error": "Det oppstod en feil",
+    "success": "Vellykket",
+    "confirm": "Bekreft"
+  }
+}
+

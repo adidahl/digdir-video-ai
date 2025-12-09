@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "DigDir",
+    "subtitle": "Semantic Video Search"
+  },
+  "nav": {
+    "search": "Search",
+    "videos": "Videos",
+    "admin": "Admin",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "organizationName": "Organization Name",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "loginError": "Invalid email or password",
+    "registerSuccess": "Account created successfully"
+  },
+  "search": {
+    "placeholder": "Search videos...",
+    "button": "Search",
+    "noResults": "No results found",
+    "results": "Results",
+    "score": "Relevance"
+  },
+  "video": {
+    "title": "Title",
+    "description": "Description",
+    "status": "Status",
+    "duration": "Duration",
+    "uploaded": "Uploaded",
+    "securityLevel": "Security Level",
+    "upload": "Upload Video",
+    "selectFile": "Select Video File",
+    "uploadButton": "Upload",
+    "processing": "Processing",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "admin": {
+    "title": "Administration",
+    "users": "Users",
+    "videos": "Videos",
+    "organizations": "Organizations",
+    "createUser": "Create User",
+    "editUser": "Edit User",
+    "deleteUser": "Delete User",
+    "stats": "Statistics"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "confirm": "Confirm"
+  }
+}
+

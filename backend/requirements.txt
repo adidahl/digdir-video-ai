@@ -1,0 +1,45 @@
+# FastAPI and server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+alembic==1.13.1
+pgvector==0.2.4
+
+# Neo4j
+neo4j==5.16.0
+
+# Authentication
+python-jose[cryptography]==3.3.0
+bcrypt==4.1.2
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.1
+
+# Celery and Redis
+celery==5.3.6
+redis==5.0.1
+
+# OpenAI and ML
+openai-whisper==20231117
+openai==1.12.0
+torch==2.2.0
+lightrag-hku[api]==1.4.9.8
+
+# Data processing
+numpy==1.26.3
+pandas==2.2.0
+
+# Utilities
+pydantic==2.6.0
+pydantic-settings==2.1.0
+aiofiles==23.2.1
+email-validator==2.1.0
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.4
+httpx==0.26.0
+
